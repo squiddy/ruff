@@ -1882,12 +1882,14 @@ dependencies = [
  "itertools",
  "libcst",
  "once_cell",
+ "regex",
  "ruff",
  "rustpython-ast",
  "rustpython-common",
  "rustpython-parser",
  "strum",
  "strum_macros",
+ "textwrap",
 ]
 
 [[package]]

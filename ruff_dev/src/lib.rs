@@ -18,3 +18,5 @@ pub mod generate_source_code;
 pub mod print_ast;
 pub mod print_cst;
 pub mod print_tokens;
+pub mod new_plugin;
+mod helpers;

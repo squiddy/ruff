@@ -15,7 +15,7 @@ use anyhow::Result;
 use clap::{Parser, Subcommand};
 use ruff_dev::{
     generate_check_code_prefix, generate_options, generate_rules_table, generate_source_code,
-    print_ast, print_cst, print_tokens,
+    new_plugin, print_ast, print_cst, print_tokens,
 };
 
 #[derive(Parser)]
@@ -42,6 +42,8 @@ enum Commands {
     PrintCST(print_cst::Cli),
     /// Print the token stream for a given Python file.
     PrintTokens(print_tokens::Cli),
+    /// Create boilerplate for a new ruff plugin.
+    NewPlugin(new_plugin::Cli),
 }
 
 fn main() -> Result<()> {
@@ -54,6 +56,7 @@ fn main() -> Result<()> {
         Commands::PrintAST(args) => print_ast::main(args)?,
         Commands::PrintCST(args) => print_cst::main(args)?,
         Commands::PrintTokens(args) => print_tokens::main(args)?,
+        Commands::NewPlugin(args) => new_plugin::main(args)?,
     }
     Ok(())
 }
