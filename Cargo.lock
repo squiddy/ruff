@@ -1942,6 +1942,7 @@ dependencies = [
  "rustpython-parser",
  "strum",
  "strum_macros",
+ "textwrap",
 ]
 
 [[package]]
