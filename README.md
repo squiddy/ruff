@@ -1502,7 +1502,7 @@ cargo +nightly test --all
 
 ## Releases
 
-Ruff is distributed on [PyPI](https://pypi.org/project/ruff/), and published via [`maturin`](https://github.com/PyO3/maturin).
+Ruff is distributed on [PyPI](https://pypi.org/project/ruff/), and published via [`setuptools-rust`](https://github.com/PyO3/setuptools-rust).
 
 See: `.github/workflows/release.yaml`.
 

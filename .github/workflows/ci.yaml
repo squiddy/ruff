@@ -151,8 +151,8 @@ jobs:
 #      - uses: jetli/wasm-bindgen-action@v0.2.0
 #      - run: wasm-pack test --node
 
-  maturin-build:
-    name: "maturin build"
+  python-build:
+    name: "python build"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -164,7 +164,7 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: "3.11"
-      - run: pip install maturin
+      - run: pip install wheel setuptools-rust
       - uses: actions/cache@v3
         env:
           cache-name: cache-cargo
@@ -177,4 +177,6 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
-      - run: maturin build -b bin
+      - run: python ./setup.py bdist_wheel
+      - run: pip install dist/*.whl --force-reinstall
+      - run: python -m unittest discover ruff
