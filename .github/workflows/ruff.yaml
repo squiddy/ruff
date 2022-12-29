@@ -44,8 +44,10 @@ jobs:
       CIBW_ARCHS_LINUX: x86_64 i686 aarch64 ppc64le s390x
       CIBW_ARCHS_MACOS: arm64 universal2
       CIBW_ARCHS_WINDOWS: x86 AMD64
+      # We're building abi3 compatible wheels, we can build using one version of python
       CIBW_BUILD: "cp311-*"
-      CIBW_SKIP: '*-musllinux_i686'
+      # Unsupported by rust
+      CIBW_SKIP: '*-musllinux_i686 *-musllinux_ppc64le *-musllinux-s390x'
 
   build-wheels:
     name: Build ${{ matrix.only }}
