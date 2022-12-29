@@ -26,7 +26,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install cibuildwheel
-        run: pipx install cibuildwheel==2.11.2
+        run: pipx install cibuildwheel==2.11.4
       - id: set-matrix
         run: |
           MATRIX=$(
@@ -47,7 +47,7 @@ jobs:
       # We're building abi3 compatible wheels, we can build using one version of python
       CIBW_BUILD: "cp311-*"
       # Unsupported by rust
-      CIBW_SKIP: '*-musllinux_i686 *-musllinux_ppc64le *-musllinux-s390x'
+      CIBW_SKIP: '*-musllinux_i686 *-musllinux_ppc64le *-musllinux_s390x'
 
   build-wheels:
     name: Build ${{ matrix.only }}
@@ -61,7 +61,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Set up QEMU
-        if: matrix.os == 'ubuntu-latest'
+        if: runner.os == 'Linux'
         uses: docker/setup-qemu-action@v2
         with:
           platforms: all
@@ -75,12 +75,14 @@ jobs:
       - run: rustup target add i686-pc-windows-msvc
         if: matrix.os == 'windows-latest'
 
-      - uses: pypa/cibuildwheel@v2.11.2
+      - uses: pypa/cibuildwheel@v2.11.4
         with:
           only: ${{ matrix.only }}
         env:
           CIBW_ENVIRONMENT: 'PATH="$HOME/.cargo/bin:$PATH" CARGO_TERM_COLOR="always"'
           CIBW_ENVIRONMENT_WINDOWS: 'PATH="$UserProfile\.cargo\bin;$PATH"'
+          CIBW_ARCHS_LINUX: auto aarch64 ppc64le s390x
+          CIBW_BUILD_VERBOSITY: 1
           CIBW_BEFORE_BUILD: rustup show
           CIBW_BEFORE_BUILD_LINUX: >
             curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain=stable --profile=minimal -y &&
