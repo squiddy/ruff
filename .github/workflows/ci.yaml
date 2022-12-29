@@ -178,3 +178,4 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
       - run: maturin build -b bin
+      - run: maturin build -b pyo3

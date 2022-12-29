@@ -1,8 +1,10 @@
 name: "[ruff] Release"
 
 on:
-  release:
-    types: [published]
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -34,7 +36,12 @@ jobs:
         uses: messense/maturin-action@v1
         with:
           target: x86_64
-          args: --release --out dist --sdist
+          args: -b bin --release --out dist --sdist
+      - name: Build wheels - x86_64
+        uses: messense/maturin-action@v1
+        with:
+          target: x86_64
+          args: -b pyo3 --release --out dist --sdist
       - name: Install built wheel - x86_64
         run: |
           pip install dist/${{ env.PACKAGE_NAME }}-*.whl --force-reinstall
@@ -60,7 +67,11 @@ jobs:
       - name: Build wheels - universal2
         uses: messense/maturin-action@v1
         with:
-          args: --release --universal2 --out dist
+          args: -b bin --release --universal2 --out dist
+      - name: Build wheels - universal2
+        uses: messense/maturin-action@v1
+        with:
+          args: -b pyo3 --release --universal2 --out dist
       - name: Install built wheel - universal2
         run: |
           pip install dist/${{ env.PACKAGE_NAME }}-*universal2.whl --force-reinstall
@@ -91,7 +102,12 @@ jobs:
         uses: messense/maturin-action@v1
         with:
           target: ${{ matrix.target }}
-          args: --release --out dist
+          args: -b bin --release --out dist
+      - name: Build wheels
+        uses: messense/maturin-action@v1
+        with:
+          target: ${{ matrix.target }}
+          args: -b pyo3 --release --out dist
       - name: Install built wheel
         shell: bash
         run: |
@@ -118,7 +134,13 @@ jobs:
         with:
           target: ${{ matrix.target }}
           manylinux: auto
-          args: --release --out dist
+          args: -b bin --release --out dist
+      - name: Build wheels
+        uses: messense/maturin-action@v1
+        with:
+          target: ${{ matrix.target }}
+          manylinux: auto
+          args: -b pyo3 --release --out dist
       - name: Install built wheel
         if: matrix.target == 'x86_64'
         run: |
@@ -144,7 +166,13 @@ jobs:
         with:
           target: ${{ matrix.target }}
           manylinux: auto
-          args: --no-default-features --release --out dist
+          args: -b bin --no-default-features --release --out dist
+      - name: Build wheels
+        uses: messense/maturin-action@v1
+        with:
+          target: ${{ matrix.target }}
+          manylinux: auto
+          args: -b pyo3 --no-default-features --release --out dist
       - uses: uraimo/run-on-arch-action@v2.0.5
         if: matrix.target != 'ppc64'
         name: Install built wheel
@@ -182,7 +210,13 @@ jobs:
         with:
           target: ${{ matrix.target }}
           manylinux: musllinux_1_2
-          args: --release --out dist
+          args: -b bin --release --out dist
+      - name: Build wheels
+        uses: messense/maturin-action@v1
+        with:
+          target: ${{ matrix.target }}
+          manylinux: musllinux_1_2
+          args: -b pyo3 --release --out dist
       - name: Install built wheel
         if: matrix.target == 'x86_64-unknown-linux-musl'
         uses: addnab/docker-run-action@v3
@@ -217,7 +251,13 @@ jobs:
         with:
           target: ${{ matrix.platform.target }}
           manylinux: musllinux_1_2
-          args: --release --out dist
+          args: -b bin --release --out dist
+      - name: Build wheels
+        uses: messense/maturin-action@v1
+        with:
+          target: ${{ matrix.platform.target }}
+          manylinux: musllinux_1_2
+          args: -b pyo3 --release --out dist
       - uses: uraimo/run-on-arch-action@master
         name: Install built wheel
         with:
@@ -257,7 +297,13 @@ jobs:
         with:
           target: ${{ matrix.target }}
           manylinux: auto
-          args: --release --out dist -i pypy${{ matrix.python-version }}
+          args: -b bin --release --out dist -i pypy${{ matrix.python-version }}
+      - name: Build wheels
+        uses: messense/maturin-action@v1
+        with:
+          target: ${{ matrix.target }}
+          manylinux: auto
+          args: -b pyo3 --release --out dist -i pypy${{ matrix.python-version }}
       - name: Install built wheel
         if: matrix.target == 'x86_64'
         run: |
